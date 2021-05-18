@@ -5,7 +5,9 @@ export const router = {};
 /**
  * Changes the "page" (state) that your SPA app is currently set to
  */
-router.setState = function() {
+router.setState = function(state, entry) {
+  console.log(state);
+
   /**
    * - There are three states that your SPA app will have
    *    1. The home page
@@ -35,4 +37,34 @@ router.setState = function() {
    *    1. You may add as many helper functions in this file as you like
    *    2. You may modify the parameters of setState() as much as you like
    */
+  if (state == "home") {
+    document.body.classList.remove("settings");
+    document.body.classList.remove("single-entry");
+    document.body.getElementsByTagName('header')[0].getElementsByTagName('h1')[0].innerHTML = "Journal Entries";
+    
+    history.pushState({}, "", "/");
+  }
+  if (state == "entry") {
+    document.body.classList.remove("settings");
+    document.body.getElementsByTagName('header')[0].getElementsByTagName('h1')[0].innerHTML = "Entry " + entry.num;
+    console.log(JSON.stringify(entry.num));
+    
+    console.log(document.body);
+    document.body.classList.add("single-entry");
+    document.querySelector("entry-page").remove();
+    var ep = document.createElement('entry-page');
+    ep.entry = entry;
+    document.body.appendChild(ep);
+
+
+    
+    history.pushState( {}, "", "/entry" + entry.num)
+  }
+  if (state == "history" ){
+    document.body.classList.remove("single-entry");
+    document.body.getElementsByTagName('header')[0].getElementsByTagName('h1')[0].innerHTML = "Settings";
+    document.body.classList.add("settings");
+
+    history.pushState( {}, "", "/settings")
+  }
 }
